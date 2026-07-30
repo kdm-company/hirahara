@@ -1,0 +1,101 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>平原こうや｜公式サイト</title><style>
+:root{--brand:#3D7E1F;--brand-dark:#2E6414;--brand-deep:#1F4A0C;--brand-soft:#F1F3E8;--brand-pale:#F8F7F1;--accent:#C6A66B;--accent-dark:#8A6E32;--accent-soft:#F5EFE0;--ink:#1B1F19;--text:#34372F;--muted:#6C7165;--line:#DEDBCF;--deep:#161A13;--max:1160px;--fx-fade-h:190px;--fx-fade-veil:#fff;--fx-fade-p:0}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,system-ui,sans-serif;color:var(--ink);background:#fff;font-size:16px;line-height:1.9;letter-spacing:.03em}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--max);margin:auto;padding:0 28px}
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.navin{height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:19px;letter-spacing:.1em}
+.logo small{display:block;font-size:10px;font-weight:800;letter-spacing:.26em;color:var(--brand-dark);line-height:1.2}
+.nav ul{display:flex;gap:32px;list-style:none;margin:0;padding:0;font-size:14px;font-weight:800}
+.nav ul a{padding:6px 2px;border-bottom:2px solid transparent}
+.nav ul a:hover{border-color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 24px;border:1px solid var(--ink);background:#fff;font-weight:800;font-size:14px;letter-spacing:.04em}
+.btn:hover{background:var(--brand-soft)}
+.btn.dark{background:var(--brand-dark);color:#fff;border-color:var(--brand-dark)}
+.btn.dark:hover{background:var(--brand-deep);border-color:var(--brand-deep)}
+.btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
+.btn.ghost:hover{background:rgba(255,255,255,.12)}
+.sub{font-size:13px;color:var(--muted)}
+.orn{font-size:11px;letter-spacing:.26em;color:var(--accent-dark);font-weight:900;text-transform:uppercase}
+.sec{padding:110px 0}
+.soft{background:var(--brand-pale)}
+.deep{background:var(--deep);color:#fff}
+.deep .sub{color:#A9ACA1}
+.grid{display:grid;gap:28px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.sec-head{margin-bottom:48px}
+.sec-title{display:grid;grid-template-columns:150px 1fr;gap:30px;align-items:end}
+.sec-title h2{font-size:clamp(32px,4.2vw,52px);line-height:1.28;letter-spacing:-.04em;margin:0;font-weight:900}
+.jp-label{font-size:13px;font-weight:900;letter-spacing:.2em;color:var(--brand-dark);padding-bottom:12px;border-bottom:2px solid var(--brand)}
+.deep .jp-label{color:#E7EAE1;border-color:#57952B}
+.lead{font-size:17px;line-height:2;color:var(--muted);max-width:780px;margin:20px 0 0}
+.deep .lead{color:#C1C4BA}
+.card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--brand);padding:34px;min-height:200px}
+.card h3{font-size:21px;line-height:1.5;margin:14px 0 12px}
+.card p{margin:0 0 18px;color:var(--text);font-size:15px;line-height:1.95}
+.num{font-size:64px;line-height:1;font-weight:900;color:var(--brand);letter-spacing:-.05em}
+.ph{min-height:400px;border:1px solid #CFC8B2;background:repeating-linear-gradient(135deg,#EBE6D7,#EBE6D7 12px,#F5F2E8 12px,#F5F2E8 24px);display:grid;place-items:center;color:#7C7F73;font-weight:800;text-align:center;line-height:1.7}
+.ph small,.hero-person small{display:block;font-size:12px;font-weight:700;color:#8F9287;margin-top:6px}
+.msg{background:#fff;border:1px solid var(--line);padding:48px}
+.msg .lead{margin-top:14px}
+.hero{position:relative;min-height:780px;background:#fff;overflow:hidden}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--fx-fade-h);background:linear-gradient(to bottom,rgba(255,255,255,0),var(--fx-fade-veil));opacity:calc(.62 + var(--fx-fade-p)*.38);pointer-events:none;z-index:5}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(110deg,#fff 0%,#fff 46%,var(--brand-soft) 46%,var(--brand-soft) 100%)}
+.hero-person{position:absolute;right:7vw;bottom:0;width:min(40vw,540px);height:640px;border:1px solid #CFC8B2;background:repeating-linear-gradient(135deg,#E4DECC,#E4DECC 12px,#F0EDE1 12px,#F0EDE1 24px);display:grid;place-items:center;color:#7C7F73;font-weight:800;text-align:center;line-height:1.7;z-index:2}
+.hero-copy{position:relative;z-index:3;min-height:780px;display:flex;align-items:center}
+.hero h1{font-size:clamp(46px,6.6vw,88px);line-height:1.12;letter-spacing:-.06em;margin:20px 0 26px;max-width:700px;font-weight:900}
+.hero .lead{max-width:560px;margin-top:0}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:min(660px,100%);margin-top:44px;border:1px solid var(--line);background:var(--line)}
+.hero-meta a{background:#fff;padding:20px;display:block}
+.hero-meta a:hover{background:var(--brand-pale)}
+.hero-meta b{display:block;font-size:15px;margin-bottom:2px}
+.page-hero{min-height:340px;background:var(--deep);color:#fff;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.page-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(19,23,17,.94),rgba(22,26,19,.72)),repeating-linear-gradient(135deg,#20241C,#20241C 16px,#282C23 16px,#282C23 32px)}
+.page-hero .wrap{position:relative;z-index:1;padding-top:80px;padding-bottom:58px}
+.page-hero h1{font-size:clamp(38px,4.8vw,62px);line-height:1.2;letter-spacing:-.04em;margin:12px 0 14px;font-weight:900}
+.page-hero p{color:#C3C6BC;max-width:700px;margin:0;font-size:16px;line-height:1.95}
+.page-hero .orn{color:#D8BE85}
+.list{border-top:1px solid var(--line)}
+.list-row{display:grid;grid-template-columns:130px 1fr 40px;gap:24px;align-items:center;padding:30px 8px;border-bottom:1px solid var(--line);position:relative}
+a.list-row:hover{background:var(--brand-pale)}
+.list-row:before{content:"";position:absolute;left:0;top:38px;width:7px;height:7px;background:var(--accent);border-radius:50%}
+.list-row time{font-size:13px;color:var(--muted);font-weight:700;padding-left:18px}
+.list-row b{font-size:17px;line-height:1.6}
+.list-row p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.7}
+.list-row .arw{color:var(--brand-dark);font-weight:900}
+.timeline{border-left:2px solid var(--brand);padding-left:32px;display:grid;gap:30px;max-width:820px}
+.time-item{position:relative}
+.time-item:before{content:"";position:absolute;left:-39px;top:9px;width:12px;height:12px;background:var(--brand-dark);border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px var(--brand-dark)}
+.time-item b{font-size:17px}
+.time-item p{margin:6px 0 0;color:var(--text);font-size:15px;line-height:1.9}
+.support{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#CFC8B2;border:1px solid #CFC8B2}
+.support>div{background:#fff;color:var(--ink);padding:38px;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.support>div:nth-child(2),.support>div:nth-child(3){background:var(--brand-pale)}
+.support h3{font-size:20px;margin:0 0 8px}
+.support p{margin:0 0 18px;color:var(--text);font-size:15px;line-height:1.9;flex:1}
+.cta{background:linear-gradient(150deg,var(--brand-dark) 0%,var(--brand-deep) 45%,var(--deep) 100%);color:#fff;text-align:center;padding:100px 0}
+.cta .orn{color:#D8BE85}
+.cta h2{font-size:clamp(32px,4.6vw,58px);line-height:1.26;letter-spacing:-.04em;margin:16px 0}
+.cta p{max-width:640px;margin:0 auto 32px;color:#C3C6BC;line-height:2}
+.footer{background:#111510;color:#fff;padding:64px 0 40px}
+.footer .grid{grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.footer b{font-size:15px;letter-spacing:.06em}
+.footer p,.footer li{font-size:13px;color:#999C90;line-height:2}
+.footer ul{list-style:none;margin:10px 0 0;padding:0}
+.footer a:hover{color:#fff}
+.copyright{border-top:1px solid #262A20;margin-top:44px;padding-top:22px;font-size:11px;color:#787B6F;letter-spacing:.08em;text-align:center}
+@supports (animation-timeline:view()){.hero::after{animation:fxfade linear both;animation-timeline:view();animation-range:exit 0% exit 80%}@keyframes fxfade{from{opacity:.62;height:var(--fx-fade-h)}to{opacity:1;height:calc(var(--fx-fade-h) + 120px)}}}
+@media(max-width:840px){.wrap{padding:0 20px}.nav ul{display:none}.hero,.hero-copy{min-height:720px}.hero-copy{align-items:flex-start;padding-top:88px}.hero-person{right:14px;bottom:30px;width:60vw;height:300px;opacity:.6}.hero h1{font-size:48px}.hero-meta,.g2,.g3,.g4,.support,.footer .grid{grid-template-columns:1fr}.sec{padding:76px 0}.sec-title{grid-template-columns:1fr;gap:12px}.jp-label{width:max-content;padding-bottom:8px}.ph{min-height:280px}.list-row{grid-template-columns:1fr;gap:6px}.list-row time{padding-left:18px}.page-hero{min-height:280px}.cta{text-align:left}.cta p{margin-left:0}}
+.photo-frame{min-height:400px;overflow:hidden;background:#EDEBE3}.photo-frame img{display:block;width:100%;height:100%;min-height:400px;object-fit:cover;object-position:center}.hero{isolation:isolate}.hero-bg{background:linear-gradient(112deg,#FBFAF6 0%,#FBFAF6 46%,#E8EBDD 46%,#E8EBDD 100%)}.hero-pattern{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}.hero-pattern:before{content:"";position:absolute;right:-5vw;top:-18%;width:min(61vw,850px);height:118%;background:repeating-linear-gradient(135deg,transparent 0,transparent 34px,rgba(61,126,31,.13) 34px,rgba(61,126,31,.13) 35px);clip-path:polygon(24% 0,100% 0,100% 100%,0 100%)}.hero-person{right:6vw;bottom:0;width:min(42vw,590px);height:690px;background:none;border:0;display:flex;align-items:flex-end;justify-content:flex-end;z-index:2}.hero-person img{width:100%;height:100%;object-fit:contain;object-position:bottom center;filter:drop-shadow(16px 24px 20px rgba(20,29,15,.16))}@media(max-width:760px){.hero{min-height:1010px}.hero-copy{min-height:1010px}.hero-person{right:-2vw;bottom:330px;width:60vw;height:350px;opacity:1}.hero-meta{position:absolute;left:0;right:0;bottom:24px}.photo-frame,.photo-frame img{min-height:330px}}</style></head><body><header class="nav"><div class="wrap navin"><a class="logo" href="index.html">平原こうや<small>HIRAHARA KOYA</small></a><ul><li><a href="profile.html">プロフィール</a></li><li><a href="policy.html">政策</a></li><li><a href="activity.html">活動報告</a></li><li><a href="support.html">応援する</a></li></ul><a class="btn dark" href="support.html">応援する</a></div></header>
+<section class="hero"><div class="hero-bg" aria-hidden="true"></div><div class="hero-pattern" aria-hidden="true"></div><div class="hero-person"><img src="assets/images/hirahara-koya-hero.png" alt="平原こうや"></div><div class="wrap hero-copy"><div><div class="orn">HIRAHARA KOYA</div><h1>身近な声を、<br>まちの力に。</h1><p class="lead">大阪市港区に暮らす一人として、子育て、防災、地域のにぎわいに向き合います。毎日の声をていねいに受け止め、まちの力へ変えていきます。</p><div class="hero-actions"><a class="btn dark" href="support.html">応援する</a><a class="btn" href="policy.html">政策を見る</a></div><div class="hero-meta"><a href="profile.html"><b>人物を知る</b><span class="sub">プロフィールへ</span></a><a href="policy.html"><b>考えを知る</b><span class="sub">政策へ</span></a><a href="activity.html"><b>活動を見る</b><span class="sub">活動報告へ</span></a></div></div></div></section>
+<section class="sec soft"><div class="wrap grid g2"><div class="ph photo-frame"><img src="assets/images/hirahara-koya-activity.png" alt="街を歩く平原こうや"></div><div class="msg"><div class="jp-label" style="display:inline-block">プロフィール</div><h2 style="font-size:clamp(28px,3.4vw,42px);line-height:1.4;letter-spacing:-.03em;margin:20px 0 16px">平原こうやについて</h2><p style="color:var(--text);line-height:2">平原こうやは1991年生まれ。大阪市港区を拠点に、地域の声を聞きながら政治活動を続けています。人とのご縁を大切に、暮らしの中の困りごとや不安を分かりやすく届けることを心がけています。</p><a class="btn dark" href="profile.html" style="margin-top:10px">プロフィールを見る</a></div></div></section>
+<section class="sec"><div class="wrap"><div class="sec-head"><div class="sec-title"><div class="jp-label">政策</div><h2>3つの重点テーマ</h2></div><p class="lead">暮らしに身近なテーマから、港区の未来を考えます。</p></div><div class="grid g3"><div class="card"><div class="num">01</div><h3>子育て・教育</h3><p>子どもを育てる家庭と学ぶ子どもたちが孤立しないまちを目指します。身近な相談先と学びの環境づくりを大切にします。</p></div><div class="card"><div class="num">02</div><h3>防災・安心安全</h3><p>災害、防犯、交通安全に備え、毎日の安心を支える地域のつながりを育てます。</p></div><div class="card"><div class="num">03</div><h3>地域活性・若者支援</h3><p>商店街や地域活動、若い世代の挑戦を応援し、港区のにぎわいを広げます。</p></div></div><div style="margin-top:36px"><a class="btn" href="policy.html">政策を詳しく見る</a></div></div></section>
+<section class="sec soft"><div class="wrap"><div class="sec-head"><div class="sec-title"><div class="jp-label">活動報告</div><h2>最新の活動</h2></div><p class="lead">地域での活動やnoteでの発信を、随時お知らせしています。</p></div><div class="list"><a class="list-row" href="https://note.com/hirahara508/" target="_blank" rel="noopener noreferrer"><time>2026.07.18</time><div><b>暮らしに近い政治の話をnoteで更新しました</b><p>制度のポイントを短くまとめています。</p></div><span class="arw">→</span></a><a class="list-row" href="https://note.com/hirahara508/" target="_blank" rel="noopener noreferrer"><time>2026.07.10</time><div><b>港区での活動報告を更新しました</b><p>街頭でいただいた声を紹介しています。</p></div><span class="arw">→</span></a><a class="list-row" href="https://note.com/hirahara508/" target="_blank" rel="noopener noreferrer"><time>2026.07.02</time><div><b>防災と安心安全について発信しました</b><p>地域でできる備えを考えました。</p></div><span class="arw">→</span></a></div><div style="margin-top:36px"><a class="btn" href="activity.html">活動報告をもっと見る</a></div></div></section>
+<section class="sec deep"><div class="wrap"><div class="sec-head"><div class="sec-title"><div class="jp-label">応援する</div><h2>応援のかたち</h2></div><p class="lead">後援会、ボランティア、個人献金、公式LINE。あなたに合った方法で、活動を支えていただけます。</p></div><div class="support"><div><h3>後援会</h3><p>活動を継続して支えていただく会です。入会のご案内を掲載します。</p></div><div><h3>ボランティア</h3><p>街頭活動やSNSでの応援など、無理のない形で参加できます。</p></div><div><h3>個人献金</h3><p>銀行振込などによるご支援の方法をご案内します。</p></div><div><h3>公式LINE</h3><p>最新情報の受け取りやお問い合わせの窓口です。</p></div></div><div style="margin-top:36px"><a class="btn ghost" href="support.html">応援の方法を見る</a></div></div></section>
+<section class="cta"><div class="wrap"><div class="orn">CONTACT</div><h2>公式LINEでつながる</h2><p>活動の最新情報やお知らせ、お問い合わせは公式LINEから。まずはお気軽にご登録ください。</p><a class="btn" href="https://note.com/hirahara508/" target="_blank" rel="noopener noreferrer" style="background:#fff;color:var(--brand-deep);border-color:#fff">公式LINEを友だち追加</a></div></section><footer class="footer"><div class="wrap"><div class="grid"><div><b>平原こうや</b><p>大阪市港区を拠点に、地域の声を聞きながら政治活動を行っています。</p></div><div><b>SNS</b><ul><li><a href="https://x.com/HIRAHARAKOUYA" target="_blank" rel="noopener noreferrer">X</a></li><li><a href="https://www.instagram.com/hiraharakouya327/" target="_blank" rel="noopener noreferrer">Instagram</a></li><li><a href="https://note.com/hirahara508/" target="_blank" rel="noopener noreferrer">note</a></li><li><a href="https://www.youtube.com/channel/UCqds5AMbdtIh2jbXqhTz1ng" target="_blank" rel="noopener noreferrer">YouTube</a></li><li><a href="https://lin.ee/n8yJid2T" target="_blank" rel="noopener noreferrer">公式LINE</a></li></ul></div><div><b>サイト情報</b><ul><li><a href="privacy.html">プライバシーポリシー</a></li><li><a href="support.html">お問い合わせ</a></li></ul></div></div><div class="copyright">© HIRAHARA KOYA</div></div></footer><script>const h=document.querySelector('.hero');if(h){addEventListener('scroll',()=>{const r=h.getBoundingClientRect();const p=Math.min(1,Math.max(0,(-r.top)/(r.height*.7)));h.style.setProperty('--fx-fade-p',p.toFixed(3));},{passive:true});}</script></body></html>
