@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* ==========================================================================
+   hero-v12.css — top view: vivid green main colour + paint-splash key visual
+   Loaded after top.css on the front page only.
+   ========================================================================== */
+
+/* 1. main colour: vivid green ------------------------------------------------ */
+:root{
+  --primary-900:#053d24;
+  --primary-800:#0b6b38;
+  --primary-700:#00963c;
+  --primary-600:#00b34a;
+  --primary-500:#22cc63;
+  --secondary-400:#58e08f;
+  --secondary-300:#8ef0b6;
+  --secondary-100:#cdf3de;
+  --secondary-050:#e7faef;
+  --secondary-025:#f3fcf7;
+}
+
+/* 2. splash layers ----------------------------------------------------------- */
+.hero{position:relative;overflow:hidden;background:var(--neutral-000);}
+.hero::before{background-image:repeating-linear-gradient(135deg,rgba(0,150,60,.05) 0 1px,transparent 1px 15px);}
+.hero__splash,
+.hero__stroke{position:absolute;left:0;right:0;pointer-events:none;background-repeat:no-repeat;}
+.hero__splash{top:0;bottom:0;z-index:0;background-image:url(../img/splash-sp.svg);background-size:cover;background-position:top center;}
+.hero__stroke{bottom:4%;height:190px;z-index:3;background-image:url(../img/stroke-sp.svg);background-size:100% 100%;}
+.hero__eyebrow,
+.hero__text,
+.hero__name,
+.hero__copy,
+.hero__scroll{z-index:4;}
+.hero__person{z-index:2;}
+
+/* 3. name: red fill + white edge / white fill + red edge --------------------- */
+.hero__name{-webkit-text-stroke:0;text-shadow:none;paint-order:stroke fill;}
+.hero__name .nm-a,
+.hero__name .nm-b{paint-order:stroke fill;}
+.hero__name .nm-a{color:var(--accent-600);-webkit-text-stroke:3px var(--neutral-000);}
+.hero__name .nm-b{color:var(--neutral-000);-webkit-text-stroke:3px var(--accent-600);}
+
+/* 4. navy-suit key visual ---------------------------------------------------- */
+.hero__person{aspect-ratio:688/1174;width:68%;max-width:300px;right:0;bottom:15%;}
+.hero__person .ph--cut{background-image:url(../img/hero-navy.webp);background-size:contain;background-position:bottom center;filter:none;}
+
+/* 5. legibility over the paint ---------------------------------------------- */
+.hero__eyebrow{color:var(--primary-800);}
+.hero__scroll{color:var(--neutral-000);}
+.hero__copy h1{text-shadow:0 0 8px rgba(255,255,255,.98),0 0 18px rgba(255,255,255,.95),0 0 34px rgba(255,255,255,.88),0 0 54px rgba(255,255,255,.72);}
+.hero__copy .sub{color:var(--neutral-900);text-shadow:0 0 7px #fff,0 0 15px rgba(255,255,255,.98),0 0 28px rgba(255,255,255,.92),0 0 46px rgba(255,255,255,.8);}
+
+@media (min-width:768px){
+  .hero__splash{background-image:url(../img/splash-pc.svg);}
+  .hero__stroke{background-image:url(../img/stroke-pc.svg);height:230px;bottom:2%;}
+  .hero__person{width:56%;max-width:400px;bottom:13%;}
+}
+@media (min-width:1024px){
+  .hero__stroke{height:260px;bottom:0;}
+  .hero__person{width:min(100%,440px);}
+  .hero__scroll{color:var(--primary-700);}
+  .hero__copy .sub{text-shadow:none;}
+  .hero__name .nm-b{-webkit-text-stroke-width:4px;}
+}
