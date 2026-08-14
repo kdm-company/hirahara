@@ -1,0 +1,24 @@
+
+/* ================= 最終仕上げ（本番公開用） ================= */
+html{scroll-behavior:smooth}
+img{max-width:100%;height:auto}
+[id]{scroll-margin-top:84px}
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid var(--accent-600);outline-offset:2px}
+.menu-btn,.nav__close{min-width:44px;min-height:44px}
+.fhdr__nav a{padding:10px 2px}
+.page.is-active{display:block}
+::selection{background:var(--secondary-100);color:var(--primary-900)}
+.skip-link{position:absolute;left:-9999px;top:0}
+.skip-link:focus{left:var(--gutter);top:10px;z-index:120;background:var(--neutral-000);color:var(--primary-900);
+  padding:10px 16px;border-radius:var(--radius);box-shadow:0 6px 20px rgba(5,43,33,.18);font-weight:700}
+/* タブレット：縦書きの名前と装飾線の重なりを回避 */
+@media (min-width:768px) and (max-width:1023px){
+  .hero__copy{left:calc(var(--gutter) + var(--nm) + 22px)}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .rv{opacity:1!important;transform:none!important}
+}
+@media print{.fhdr,.nav,.menu-btn,.skip-link{display:none!important}}
