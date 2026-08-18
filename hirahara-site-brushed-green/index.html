@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>平原こうや 公式サイト</title>
+<meta name="description" content="平原こうやの公式ハブページです。プロフィールやSNS、noteでの発信をご案内しています。">
+<meta name="theme-color" content="#3FD113">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Yuji+Syuku&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#3FD113;--green-2:#63DF40;--green-deep:#24910D;--green-ink:#203214;
+  --red:#D9432F;--paper:#fff;--wash:#F2FBEF;--warm:#F8FAF4;--line:#D8E8D0;
+  --text:#1D2819;--muted:#5F6F58;--shadow:0 18px 60px rgba(36,145,13,.10)
+}
+html{scroll-behavior:smooth}
+body{font-family:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;color:var(--text);background:var(--paper);line-height:1.9;letter-spacing:.035em;-webkit-font-smoothing:antialiased}
+body.menu-open{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+.wrap{width:min(1080px,calc(100% - 40px));margin-inline:auto}
+.sec{position:relative;padding:86px 0;overflow:hidden}
+.sec+.sec::before{content:"";position:absolute;top:-14px;left:50%;width:min(760px,86vw);height:76px;transform:translateX(-50%);background:url('assets/svg/section-divider.svg') center/contain no-repeat;pointer-events:none}
+.en{font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--green)}
+.sec-head{margin-bottom:36px}
+.sec-head h2{font-size:clamp(24px,4vw,34px);line-height:1.45;font-weight:900;letter-spacing:.07em;margin-top:5px}
+.sec-head h2::after{content:"";display:block;width:42px;height:3px;margin-top:15px;background:linear-gradient(90deg,var(--green),var(--red));border-radius:99px}
+
+/* header */
+.header,.fheader{left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
+.header{position:absolute;top:0}
+.fheader{position:fixed;top:0;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(221,232,225,.8);transform:translateY(-110%);visibility:hidden;transition:transform .32s ease,visibility .32s}
+.fheader.show{transform:translateY(0);visibility:visible}
+.logo{font-size:17px;font-weight:900;letter-spacing:.13em;color:var(--green-ink)}
+.logo small{display:block;font-size:8px;font-weight:700;letter-spacing:.22em;color:var(--green);margin-top:-2px}
+.gnav{display:none;gap:28px;font-size:12px;font-weight:700}
+.gnav a{position:relative;padding:6px 0}
+.gnav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--green);transition:right .2s ease}
+.gnav a:hover::after{right:0}
+.menu-btn{width:44px;height:44px;border:0;border-radius:50%;background:var(--green);box-shadow:0 8px 22px rgba(63,209,19,.18);cursor:pointer;position:relative;z-index:70}
+.menu-btn span{display:block;width:19px;height:1.5px;background:#fff;margin:5px auto;transition:.25s}
+body.menu-open .menu-btn span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+body.menu-open .menu-btn span:nth-child(2){opacity:0}
+body.menu-open .menu-btn span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.menu{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:center;padding:44px 32px;background:linear-gradient(145deg,var(--green) 0%,var(--green-deep) 100%);opacity:0;visibility:hidden;pointer-events:none;transition:.25s}
+body.menu-open .menu{opacity:1;visibility:visible;pointer-events:auto}
+.menu::after{content:"";position:absolute;inset:0;background:url('assets/svg/cta-flow.svg') center/cover no-repeat;pointer-events:none}
+.menu>a,.menu-sns{position:relative;z-index:1}
+.menu>a{color:#fff;font-size:21px;font-weight:900;letter-spacing:.08em;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.18)}
+.menu a small{display:block;font-size:9px;font-weight:700;letter-spacing:.28em;opacity:.68}
+.menu-sns{display:flex;gap:22px;margin-top:26px}
+.menu-sns a{font-size:11px;color:#fff;font-weight:700;letter-spacing:.1em}
+
+/* hero */
+.hero{position:relative;min-height:100svh;overflow:hidden;background:linear-gradient(150deg,#fff 0%,#FBFDF8 46%,#F1F9EB 100%)}
+.hero::before{content:"";position:absolute;inset:0;background:url('assets/svg/hero-flow.svg') 72% 20%/min(1000px,115vw) auto no-repeat;pointer-events:none}
+.hero::after{content:"";position:absolute;right:-24vw;bottom:-35vw;width:86vw;height:86vw;border-radius:50%;background:radial-gradient(circle,rgba(63,209,19,.20) 0%,rgba(63,209,19,.08) 38%,rgba(63,209,19,0) 70%);filter:blur(14px);pointer-events:none}
+.hero-photo{position:absolute;z-index:2;right:-8%;bottom:12svh;height:68svh}
+.hero-photo img{height:100%;width:auto;object-fit:contain;filter:drop-shadow(0 22px 38px rgba(36,145,13,.18))}
+.hero-name{position:absolute;z-index:3;left:16px;top:18svh;writing-mode:vertical-rl;font-size:clamp(54px,17vw,70px);font-weight:900;line-height:1;letter-spacing:.045em}
+.hero-name .n1{color:var(--red)}
+.hero-name .n2{color:#fff;text-shadow:0 0 0 transparent,-1.5px 0 var(--green),0 1.5px var(--green),1.5px 0 var(--green),0 -1.5px var(--green)}
+.hero-copy{position:absolute;z-index:4;left:14px;right:14px;bottom:18px;padding:21px 20px;text-align:right;background:rgba(255,255,255,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 18px 48px rgba(36,145,13,.08)}
+.hero-brow{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--green)}
+.hero-brow::before{content:"";width:18px;height:1px;background:var(--red)}
+.hero-catch{font-size:26px;line-height:1.5;font-weight:900;letter-spacing:.045em}
+.hero-sub{margin-top:7px;font-size:12px;color:#41513A;font-weight:500}
+.scroll-cue{display:none;position:absolute;z-index:5;right:20px;bottom:22px;writing-mode:vertical-rl;font-size:9px;letter-spacing:.28em;color:var(--green);font-weight:700}
+.scroll-cue::after{content:"";display:block;width:1px;height:35px;margin:8px auto;background:var(--green)}
+
+/* message */
+.message{background:#fff}
+.message-inner{max-width:680px;margin-inline:auto;position:relative}
+.message-inner::after{content:"";position:absolute;width:180px;height:135px;right:-88px;bottom:-55px;background:url('assets/svg/dot-field.svg') center/contain no-repeat;pointer-events:none}
+.message h2{font-size:clamp(23px,4vw,31px);line-height:1.65;font-weight:900;margin:8px 0 22px;letter-spacing:.05em}
+.message p{font-size:14px;color:#39473A}
+.acc-red{color:var(--red)}
+.signature{margin-top:28px;display:flex;justify-content:flex-end;align-items:center;gap:10px}
+.signature::before{content:"";width:38px;height:1px;background:var(--line)}
+.signature .name{font-family:'Yuji Syuku',serif;font-size:22px;letter-spacing:.12em;color:var(--green-ink)}
+
+/* profile */
+#profile{background:var(--warm)}
+.prof-grid{display:grid;gap:38px;align-items:center}
+.prof-photo{position:relative;max-width:430px;margin-inline:auto;padding:18px}
+.prof-photo::before{content:"";position:absolute;inset:-38px -34px -40px -44px;background:url('assets/svg/photo-orbit.svg') center/contain no-repeat;pointer-events:none}
+.prof-photo img{position:relative;z-index:1;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:22px;box-shadow:var(--shadow)}
+.prof-copy{position:relative;z-index:1}
+.prof-name{font-size:clamp(27px,4.5vw,38px);font-weight:900;letter-spacing:.09em;line-height:1.35;color:var(--green-ink)}
+.prof-name small{display:block;font-size:10px;font-weight:700;letter-spacing:.22em;color:var(--green);margin-bottom:4px}
+.prof-text{font-size:14px;color:#39473A;margin-top:20px;max-width:560px}
+
+/* history */
+.history{background:linear-gradient(180deg,var(--wash),#fff)}
+.history .wrap{max-width:780px}
+.timeline{position:relative;padding-left:4px}
+.timeline::before{content:"";position:absolute;left:8px;top:11px;bottom:16px;width:1px;background:linear-gradient(var(--green),var(--line))}
+.timeline li{position:relative;padding:0 0 30px 36px}
+.timeline li::before{content:"";position:absolute;left:3px;top:9px;width:11px;height:11px;border-radius:50%;background:#fff;border:3px solid var(--green);box-shadow:0 0 0 5px rgba(63,209,19,.08)}
+.timeline li:first-child::after{content:"";position:absolute;left:28px;top:5px;width:4px;height:4px;border-radius:50%;background:var(--red)}
+.timeline h3{font-size:16px;font-weight:900;color:var(--green-ink)}
+.timeline p{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* note */
+#note{background:#fff}
+.news-list{border-top:1px solid var(--line)}
+.news-list li{border-bottom:1px solid var(--line)}
+.news-list a{display:grid;grid-template-columns:auto auto 1fr;gap:8px 12px;align-items:center;padding:19px 4px;transition:padding .2s ease,background .2s ease}
+.news-list a:hover{padding-left:12px;background:linear-gradient(90deg,var(--wash),transparent)}
+.news-list time{font-size:11px;font-weight:700;color:var(--green);letter-spacing:.05em}
+.tag{justify-self:start;font-size:9px;font-weight:700;border:1px solid #C8DFBD;color:var(--green-deep);padding:2px 9px;border-radius:999px;line-height:1.55}
+.tag.new{background:var(--red);border-color:var(--red);color:#fff}
+.news-list .t{grid-column:1/-1;font-size:14px;font-weight:700;color:#24321F}
+.more{display:inline-flex;align-items:center;gap:9px;margin-top:25px;font-size:12px;font-weight:700;color:var(--green)}
+.more::after{content:"→";transition:transform .2s ease}
+.more:hover::after{transform:translateX(4px)}
+
+/* CTA */
+.cta{background:linear-gradient(180deg,#fff,var(--wash));text-align:center}
+.cta-card{position:relative;overflow:hidden;padding:52px 22px;border-radius:28px;background:linear-gradient(145deg,var(--green) 0%,var(--green-deep) 100%);color:#fff;box-shadow:0 24px 70px rgba(36,145,13,.22)}
+.cta-card::after{content:"";position:absolute;inset:0;background:url('assets/svg/cta-flow.svg') center/cover no-repeat;pointer-events:none}
+.cta-card>*{position:relative;z-index:1}
+.cta .en{color:#E4F7DD}
+.cta h2{font-size:clamp(23px,4vw,31px);font-weight:900;letter-spacing:.055em;margin:7px 0 12px}
+.cta p{max-width:580px;margin:0 auto 28px;font-size:13px;opacity:.90}
+.cta-btns{display:flex;flex-direction:column;gap:11px;max-width:430px;margin-inline:auto}
+.btn{display:block;padding:15px 18px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.06em;transition:.2s}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.btn-ghost{border:1px solid rgba(255,255,255,.62);color:#fff;background:rgba(255,255,255,.03)}
+.btn:hover{transform:translateY(-2px)}
+.btn-ghost:hover{background:#fff;color:var(--green-deep)}
+
+/* footer */
+.footer{padding:48px 0 30px;background:#173D0B;color:rgba(255,255,255,.76)}
+.footer .logo{color:#fff}
+.footer .logo small{color:#C8EFB9}
+.fnav,.fsns{display:flex;flex-wrap:wrap;gap:10px 22px}
+.fnav{margin:22px 0;font-size:11px}
+.fsns{font-size:10px;font-weight:700;letter-spacing:.12em}
+.copy{font-size:9px;color:rgba(255,255,255,.40);margin-top:22px;letter-spacing:.1em}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.rv.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.btn,.gnav a::after{transition:none}}
+
+@media(min-width:840px){
+  .header{padding:24px 48px}.fheader{padding:11px 48px}.gnav,.fheader .gnav{display:flex}.menu-btn{display:none}
+  .sec{padding:118px 0}.wrap{width:min(1080px,calc(100% - 96px))}
+  .hero{min-height:92vh}.hero::before{background-position:82% 12%;background-size:min(1100px,78vw) auto}
+  .hero-photo{right:6%;bottom:0;height:80vh}.hero::after{right:-10vw;bottom:-34vw;width:66vw;height:66vw}
+  .hero-name{writing-mode:horizontal-tb;left:48px;top:auto;bottom:27vh;font-size:clamp(76px,8vw,112px);line-height:1.02;letter-spacing:.02em}
+  .hero-name .n1{margin-right:.05em}.hero-name .n2{color:#fff;text-shadow:-2px 0 var(--green),0 2px var(--green),2px 0 var(--green),0 -2px var(--green)}
+  .hero-copy{left:48px;right:auto;top:18vh;bottom:auto;width:min(520px,40vw);padding:0;text-align:left;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero-catch{font-size:clamp(34px,3.3vw,48px);line-height:1.42}.hero-sub{font-size:13px;max-width:430px}.scroll-cue{display:block}
+  .message-inner::after{right:-140px;bottom:-80px;width:230px;height:170px}.message p{font-size:15px}
+  .prof-grid{grid-template-columns:minmax(320px,410px) 1fr;gap:82px}.prof-photo{margin:0}.prof-text{font-size:15px}
+  .news-list a{grid-template-columns:92px 48px 46px 1fr;padding:21px 6px}.news-list .t{grid-column:auto;font-size:14px}.tag{justify-self:start}
+  .cta-card{padding:76px 48px}.cta-btns{flex-direction:row;max-width:690px}.cta-btns .btn{flex:1}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="#top">平原こうや<small>HIRAHARA KOUYA</small></a>
+  <nav class="gnav" aria-label="メインナビゲーション"><a href="#profile">プロフィール</a><a href="#message">メッセージ</a><a href="#note">NOTE</a><a href="#sns">SNS</a></nav>
+  <button class="menu-btn" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+<div class="fheader" aria-hidden="true" inert>
+  <a class="logo" href="#top">平原こうや<small>HIRAHARA KOUYA</small></a>
+  <nav class="gnav" aria-label="追従ナビゲーション"><a href="#profile">プロフィール</a><a href="#message">メッセージ</a><a href="#note">NOTE</a><a href="#sns">SNS</a></nav>
+  <button class="menu-btn" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+</div>
+<div class="menu" aria-hidden="true">
+  <a href="#profile">プロフィール<small>PROFILE</small></a>
+  <a href="#message">メッセージ<small>MESSAGE</small></a>
+  <a href="#note">NOTE<small>NOTE</small></a>
+  <a href="#sns">SNS<small>SNS</small></a>
+  <div class="menu-sns"><a href="https://x.com/HIRAHARAKOUYA" target="_blank" rel="noopener">X</a><a href="https://www.instagram.com/hiraharakouya327/" target="_blank" rel="noopener">Instagram</a><a href="https://note.com/hirahara508" target="_blank" rel="noopener">note</a></div>
+</div>
+
+<main>
+<section class="hero" id="top">
+  <div class="hero-photo"><img src="assets/images/hero.png" width="865" height="1300" alt="平原こうや" fetchpriority="high" decoding="async"></div>
+  <p class="hero-name"><span class="n1">平原</span><span class="n2">こうや</span></p>
+  <div class="hero-copy">
+    <p class="hero-brow">HIRAHARA KOUYA</p>
+    <h1 class="hero-catch">日々の暮らしと、<br>想うことを。</h1>
+    <p class="hero-sub">SNSやnoteでの発信を、このページにまとめています。</p>
+  </div>
+  <p class="scroll-cue">SCROLL</p>
+</section>
+
+<section class="sec message" id="message"><div class="wrap message-inner rv">
+  <p class="en">Message</p>
+  <h2>日々の暮らしの中で、<br><span class="acc-red">感じたことを大切に。</span></h2>
+  <p>兵庫で生まれ育ち、会社員として働く中で、日々の暮らしや人との出会いを大切にしてきました。ここでは、そうした日常の中で感じたことや近況を、飾らない言葉でお伝えしていきます。</p>
+  <div class="signature"><span class="name">平原 こうや</span></div>
+</div></section>
+
+<section class="sec" id="profile"><div class="wrap prof-grid">
+  <div class="prof-photo rv"><img src="assets/images/profile.jpg" width="1200" height="1500" alt="平原こうや プロフィール写真" loading="lazy" decoding="async"></div>
+  <div class="prof-copy rv">
+    <p class="prof-name"><small>HIRAHARA KOUYA</small>平原 こうや</p>
+    <p class="prof-text">兵庫で生まれ育ち、会社員として働いてきました。日々の暮らしの中で感じたことを大切に、これからも自分の言葉で発信を続けていきます。</p>
+    <div class="signature"><span class="name">平原 こうや</span></div>
+  </div>
+</div></section>
+
+<section class="sec history"><div class="wrap">
+  <div class="sec-head rv"><p class="en">History</p><h2>これまでの歩み</h2></div>
+  <ul class="timeline rv">
+    <li><h3>兵庫県で生まれ育つ</h3><p>地域とともにある暮らしの中で育ちました。</p></li>
+    <li><h3>会社員として勤務</h3><p>働く中で、さまざまな経験を重ねました。</p></li>
+  </ul>
+</div></section>
+
+<section class="sec" id="note"><div class="wrap">
+  <div class="sec-head rv"><p class="en">Note</p><h2>最新の発信</h2></div>
+  <ul class="news-list rv">
+    <li><a href="https://note.com/hirahara508/n/n118db88459a1" target="_blank" rel="noopener"><time datetime="2026-08-07">2026.08.07</time><span class="tag new">NEW</span><span class="tag">note</span><span class="t">熊本代表・有明、大逆転で甲子園初勝利！</span></a></li>
+    <li><a href="https://note.com/hirahara508/n/n3158386e1032" target="_blank" rel="noopener"><time datetime="2026-08-05">2026.08.05</time><span class="tag">note</span><span class="t">避難所での生活に不安を感じている皆さまへ</span></a></li>
+    <li><a href="https://note.com/hirahara508/n/ndda6cb8db4ac" target="_blank" rel="noopener"><time datetime="2026-08-05">2026.08.05</time><span class="tag">note</span><span class="t">熊本地震で被災された皆さまへ</span></a></li>
+  </ul>
+  <a class="more rv" href="https://note.com/hirahara508" target="_blank" rel="noopener">noteで記事をもっと見る</a>
+</div></section>
+
+<section class="sec cta" id="sns"><div class="wrap rv"><div class="cta-card">
+  <p class="en">Follow</p>
+  <h2>SNSで発信しています</h2>
+  <p>日々の様子はX・Instagram・noteで発信しています。よろしければフォローしてください。</p>
+  <div class="cta-btns"><a class="btn btn-red" href="https://x.com/HIRAHARAKOUYA" target="_blank" rel="noopener">Xをフォロー</a><a class="btn btn-ghost" href="https://www.instagram.com/hiraharakouya327/" target="_blank" rel="noopener">Instagramをフォロー</a><a class="btn btn-ghost" href="https://note.com/hirahara508" target="_blank" rel="noopener">noteを読む</a></div>
+</div></div></section>
+</main>
+
+<footer class="footer"><div class="wrap">
+  <p class="logo">平原こうや<small>HIRAHARA KOUYA</small></p>
+  <nav class="fnav" aria-label="フッターナビゲーション"><a href="#profile">プロフィール</a><a href="#message">メッセージ</a><a href="#note">NOTE</a><a href="#sns">SNS</a></nav>
+  <div class="fsns"><a href="https://x.com/HIRAHARAKOUYA" target="_blank" rel="noopener">X</a><a href="https://www.instagram.com/hiraharakouya327/" target="_blank" rel="noopener">INSTAGRAM</a><a href="https://note.com/hirahara508" target="_blank" rel="noopener">NOTE</a></div>
+  <p class="copy">© HIRAHARA KOUYA</p>
+</div></footer>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var fh=document.querySelector('.fheader');
+  var menu=document.querySelector('.menu');
+  var btns=document.querySelectorAll('.menu-btn');
+  function setMenu(open){
+    document.body.classList.toggle('menu-open',open);
+    btns.forEach(function(b){b.setAttribute('aria-expanded',String(open))});
+    menu.setAttribute('aria-hidden',String(!open));
+  }
+  addEventListener('scroll',function(){
+    var show=scrollY>160;
+    fh.classList.toggle('show',show);
+    fh.setAttribute('aria-hidden',String(!show));
+    fh.toggleAttribute('inert',!show);
+  },{passive:true});
+  btns.forEach(function(b){b.addEventListener('click',function(){setMenu(!document.body.classList.contains('menu-open'))})});
+  document.querySelectorAll('.menu a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});
+    document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  }else{
+    document.querySelectorAll('.rv').forEach(function(el){el.classList.add('on')});
+  }
+});
+</script>
+</body>
+</html>
