@@ -1,0 +1,104 @@
+name: Fill approved copy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fill:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fill only approved copy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          history_old='''<section class="sec policy history" id="history"><div class="wrap">
+          <div class="sec-head rv"><p class="en">History</p><h2>これまでの歩み</h2></div>
+          <ul class="timeline rv">
+          <li><h3>1991年</h3><p>大阪府で生まれ、兵庫県で育ちました。人生の長い時間を兵庫で過ごし、地域の中で成長してきました。</p></li>
+          <li><h3>社会人時代</h3><p>働く中で、さまざまな経験を重ねました。</p></li>
+          <li><h3>政治の世界へ</h3></li>
+          <li><h3>2023年</h3><p>6,136票</p></li>
+          <li><h3>そして、兵庫へ</h3></li>
+          </ul>
+          </div></section>'''
+
+          history_new='''<section class="sec policy history" id="history"><div class="wrap">
+          <div class="sec-head rv"><p class="en">History</p><h2>これまでの歩み</h2></div>
+          <ul class="timeline rv">
+          <li><h3>01 1991年<br>大阪府で生まれ、兵庫県で育つ</h3><p>大阪府で生まれ、兵庫県で育ちました。<br>人生の長い時間を兵庫で過ごし、地域の中で成長してきました。</p></li>
+          <li><h3>02 社会人時代<br>会社員として勤務</h3><p>民間企業で働き、生活者・働く世代として社会人経験を積みました。</p></li>
+          <li><h3>03 政治の世界へ<br>国政・地方政治の現場で秘書として活動</h3><p>衆議院議員公設秘書、参議院議員私設秘書、大阪維新の会副代表秘書として勤務。<br>国政と地方政治、それぞれの現場で、政策や地域課題、政治活動に向き合いながら経験を重ねてきました。</p></li>
+          <li><h3>04 2023年<br>大阪市会議員選挙に挑戦</h3><p>2023年、大阪市会議員選挙に挑戦し、6,136票をいただきました。<br>多くの方との出会いを通じて、政治は地域を歩き、直接声を聞くことから始まると改めて実感しました。</p></li>
+          <li><h3>05 そして、兵庫へ<br>育った兵庫の未来のために</h3><p>これまで政治の現場で培ってきた経験を、育った兵庫の未来のために生かしたい。<br>地域の声に耳を傾け、暮らしの課題と向き合いながら、次の世代へ責任ある政治を目指して活動しています。</p></li>
+          </ul>
+          </div></section>'''
+
+          policy_old='''<section class="sec policy" id="policy"><div class="wrap">
+          <div class="sec-head rv"><p class="en">Policy</p><h2>改革を、県民生活の向上へ。</h2></div>
+          <div class="policy-grid rv">
+          <details class="policy-card" data-policy-slot="1"><span class="num">01</span><summary>詳しく見る</summary><div class="policy-detail"></div></details>
+          <details class="policy-card" data-policy-slot="2"><span class="num">02</span><summary>詳しく見る</summary><div class="policy-detail"></div></details>
+          <details class="policy-card" data-policy-slot="3"><span class="num">03</span><summary>詳しく見る</summary><div class="policy-detail"></div></details>
+          <details class="policy-card" data-policy-slot="4"><span class="num">04</span><summary>詳しく見る</summary><div class="policy-detail"></div></details>
+          </div>
+          </div></section>'''
+
+          policy_new='''<section class="sec policy" id="policy"><div class="wrap">
+          <div class="sec-head rv"><p class="en">目指す政治</p><h2>改革を、県民生活の向上へ。</h2><p>改革そのものを目的にするのではなく、<br>その先にある「暮らしが良くなった」を実現する。<br><br>税金の使い方、行政のあり方、子育て・教育、地域経済、そして政治の透明性。<br><br>現場の声を大切にしながら、県民の皆さまに開かれた、分かりやすい政治を目指します。</p></div>
+          <div class="policy-grid rv">
+          <details class="policy-card" data-policy-slot="1"><span class="num">01</span><h3>持続可能な兵庫へ<br>行財政改革</h3><summary>詳しく見る</summary><div class="policy-detail"><p>限られた財源を、本当に必要な行政サービスへ。<br>事業や補助金、外郭団体などを不断に見直し、将来世代へ過度な負担を残さない県政を目指します。<br>行政の効率化やDXも進め、限られた人員・財源をより効果的に活用できる行政を目指します。</p></div></details>
+          <details class="policy-card" data-policy-slot="2"><span class="num">02</span><h3>子どもたちの未来へ<br>子育て・教育</h3><summary>詳しく見る</summary><div class="policy-detail"><p>子育て世代を支え、子どもたちが家庭環境に左右されず、それぞれの可能性を伸ばせる兵庫を目指します。<br>子どもを産み育てたいと思える環境づくりと、一人ひとりの個性や可能性を伸ばす教育を大切にします。</p></div></details>
+          <details class="policy-card" data-policy-slot="3"><span class="num">03</span><h3>兵庫の可能性を伸ばす<br>地域と経済の成長</h3><summary>詳しく見る</summary><div class="policy-detail"><p>神戸・阪神・播磨・但馬・丹波・淡路。<br>それぞれの地域が持つ強みや魅力を生かし、人や企業から選ばれる兵庫を目指します。<br>地域ごとの特色を大切にしながら、兵庫全体の成長と県民生活の向上につなげていきます。</p></div></details>
+          <details class="policy-card" data-policy-slot="4"><span class="num">04</span><h3>県政を、もっとオープンに。<br>情報公開・発信強化</h3><summary>詳しく見る</summary><div class="policy-detail"><p>政治や行政で何が議論され、税金がどのように使われ、何が決まったのか。<br>政治に詳しい人だけではなく、誰にでも分かりやすく伝わる県政を目指します。<br><br>情報公開を積極的に進めるとともに、SNSなども活用し、議会や行政の動きを迅速かつ分かりやすく発信します。<br><br>政治家自身の活動や考えについても継続的に発信し、県民と政治との情報格差をできる限り小さくしていきます。<br><br>「何をしているのか分からない政治」から、<br>「見える、分かる、参加できる政治」へ。<br><br>政治の透明化を力強く進めます。</p></div></details>
+          </div>
+          </div></section>'''
+
+          connect_old='''<p class="en">Connect</p><h2>平原こうやとつながる</h2>
+          <div class="cta-btns">'''
+          connect_new='''<p class="en">Connect</p><h2>平原こうやとつながる</h2>
+          <p>政治は、一方的に伝えるだけでは前に進みません。<br><br>地域で感じていること、日々の暮らしの中で困っていること、これからの兵庫について思うこと。<br><br>皆さまの声を、ぜひお聞かせください。</p>
+          <div class="cta-btns">'''
+
+          for label, old in [('HISTORY', history_old), ('POLICY', policy_old), ('CONNECT', connect_old)]:
+            if s.count(old) != 1:
+              raise SystemExit(f'{label} anchor count: {s.count(old)}')
+
+          s=s.replace(history_old, history_new, 1)
+          s=s.replace(policy_old, policy_new, 1)
+          s=s.replace(connect_old, connect_new, 1)
+
+          required=[
+            '改革を、<br>暮らしの前進へ。',
+            '政治を、もっと身近に。<br><span class="acc-red">暮らしを、もっと前へ。</span>',
+            '大阪府で生まれ、兵庫県で育つ。',
+            '最新の発信',
+            'SNSでも発信しています',
+            '日々の活動や地域での出来事、政治について考えていることなどを発信しています。'
+          ]
+          for x in required:
+            if x not in s: raise SystemExit('Existing approved copy lost: '+x)
+          if '<div class="signature"' in s.split('</style>',1)[-1]: raise SystemExit('Signature returned')
+          if s.count('data-policy-slot=') != 4: raise SystemExit('Policy structure changed')
+          if s.count('<li><a href="https://note.com/hirahara508/n/') != 3: raise SystemExit('NOTE list changed')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit copy fill
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Fill approved HISTORY POLICY and connect copy'
+          git push
