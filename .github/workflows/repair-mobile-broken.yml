@@ -1,0 +1,114 @@
+name: Repair broken mobile design
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install validator
+        run: python -m pip install --quiet beautifulsoup4
+      - name: Repair profile ratio and policy cards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          before = BeautifulSoup(s, 'html.parser')
+          before_text = '\n'.join(x.strip() for x in before.body.stripped_strings)
+          before_hrefs = [a.get('href') for a in before.find_all('a')]
+          before_order = [e.get('id') or 'footer' for e in before.find_all(['section','footer'])]
+
+          pattern = re.compile(
+              r'<details class="policy-card" data-policy-slot="(\d+)">'
+              r'<span class="num">(.*?)</span>'
+              r'<h3>(.*?)</h3>'
+              r'<summary>詳しく見る</summary>'
+              r'(<div class="policy-detail">.*?</div>)'
+              r'</details>',
+              re.S
+          )
+
+          def repl(m):
+              slot, num, title, detail = m.groups()
+              return (
+                  f'<details class="policy-card" data-policy-slot="{slot}">'
+                  f'<summary><span class="num">{num}</span>'
+                  f'<span class="policy-title">{title}</span>'
+                  f'<span class="policy-toggle">詳しく見る</span></summary>'
+                  f'{detail}</details>'
+              )
+
+          s, count = pattern.subn(repl, s)
+          if count != 4:
+              raise SystemExit(f'Expected 4 policy cards, repaired {count}')
+
+          css = r'''
+          /* ===== Screenshot repair: profile image aspect ratio ===== */
+          .prof-photo{overflow:hidden;border-radius:16px}
+          .prof-photo img{display:block;width:100%;height:auto!important;aspect-ratio:1/1;object-fit:cover;object-position:center top}
+
+          /* ===== Screenshot repair: policy closed-card visibility ===== */
+          .policy-card summary{display:block;min-height:0;padding:0;list-style:none}
+          .policy-card summary::-webkit-details-marker{display:none}
+          .policy-card summary::marker{content:""}
+          .policy-card .num{position:absolute;right:18px;top:12px;font-size:44px;font-weight:900;color:var(--wash);letter-spacing:0;pointer-events:none}
+          .policy-card .policy-title{display:block;font-size:20px;font-weight:900;line-height:1.5;padding-right:50px;margin-bottom:12px;position:relative;color:var(--ink)}
+          .policy-card .policy-title::before{content:"";display:block;width:34px;height:5px;background:var(--green);border-radius:3px;margin-bottom:10px}
+          .policy-card .policy-toggle{display:flex;align-items:center;min-height:44px;padding:8px 0;font-size:16px;line-height:1.5;font-weight:700;color:var(--green-deep);border-top:1px solid #e5eee2}
+          .policy-card .policy-toggle::after{content:"";width:9px;height:9px;margin-left:auto;margin-right:3px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .2s ease;flex:0 0 auto}
+          .policy-card[open] .policy-toggle::after{transform:rotate(225deg)}
+          .policy-card summary::after{content:none!important}
+          .policy-card[open] summary::after{content:none!important}
+          @media(min-width:840px){.policy-card .policy-title{font-size:22px}}
+          @media(prefers-reduced-motion:reduce){.policy-card .policy-toggle::after{transition:none}}
+          '''
+
+          if 'Screenshot repair: profile image aspect ratio' in s:
+              raise SystemExit('Repair CSS already exists')
+          s = s.replace('</style>', css + '\n</style>', 1)
+
+          after = BeautifulSoup(s, 'html.parser')
+          after_text = '\n'.join(x.strip() for x in after.body.stripped_strings)
+          after_hrefs = [a.get('href') for a in after.find_all('a')]
+          after_order = [e.get('id') or 'footer' for e in after.find_all(['section','footer'])]
+
+          if before_text != after_text:
+              raise SystemExit('Visible text changed')
+          if before_hrefs != after_hrefs:
+              raise SystemExit('Link destinations changed')
+          if before_order != after_order:
+              raise SystemExit('Section order changed')
+          cards = after.select('#policy details.policy-card')
+          if len(cards) != 4:
+              raise SystemExit('Policy card count changed')
+          for card in cards:
+              if not card.select_one('summary .num') or not card.select_one('summary .policy-title') or not card.select_one('summary .policy-toggle') or not card.select_one('.policy-detail p'):
+                  raise SystemExit('Policy card structure invalid')
+          img = after.select_one('#profile .prof-photo img')
+          if not img or img.get('src') != 'assets/images/profile-home.webp':
+              raise SystemExit('Profile image source changed')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit repair
+        run: |
+          git diff --check
+          test "$(git diff --name-only)" = "index.html"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Repair mobile profile image and policy cards'
+          git push
