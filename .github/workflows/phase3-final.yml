@@ -1,0 +1,207 @@
+name: Phase 3 final polish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install image and HTML tooling
+        run: python -m pip install --quiet Pillow beautifulsoup4
+      - name: Apply verified final adjustments
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          from PIL import Image, ImageDraw
+          import re, base64, io, json
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          orig=s
+          orig_soup=BeautifulSoup(orig,'html.parser')
+          orig_body_text='\n'.join(x.strip() for x in orig_soup.body.stripped_strings)
+          orig_hrefs=[a.get('href') for a in orig_soup.find_all('a')]
+          orig_order=[e.get('id') or 'footer' for e in orig_soup.find_all(['section','footer'])]
+
+          dataurls=re.findall(r'data:image/(png|jpeg);base64,([A-Za-z0-9+/=]+)',s)
+          if len(dataurls)!=2: raise SystemExit(f'Raster data URL count changed: {len(dataurls)}')
+          hero=Image.open(io.BytesIO(base64.b64decode(dataurls[0][1]))).convert('RGBA')
+          prof=Image.open(io.BytesIO(base64.b64decode(dataurls[1][1]))).convert('RGB')
+          if hero.size!=(865,1300) or prof.size!=(1254,1254): raise SystemExit('Unexpected image dimensions')
+          Path('assets/images').mkdir(parents=True,exist_ok=True)
+          hero.save('assets/images/hero-home.webp','WEBP',quality=92,method=6)
+          prof.save('assets/images/profile-home.webp','WEBP',quality=92,method=6)
+
+          og=Image.new('RGB',(1200,630),'white')
+          draw=ImageDraw.Draw(og)
+          for x in range(1200):
+            t=x/1199
+            if t<.55:
+              k=t/.55; c=(int(255-(255-239)*k),255,int(255-(255-234)*k))
+            else:
+              k=(t-.55)/.45; c=(int(239+(255-239)*k),255,int(234+(255-234)*k))
+            draw.line([(x,0),(x,629)],fill=c)
+          draw.rectangle((0,602,1200,630),fill='#3FD113')
+          scale=min(600/hero.height,560/hero.width)
+          ph=hero.resize((round(hero.width*scale),round(hero.height*scale)),Image.Resampling.LANCZOS)
+          og=og.convert('RGBA'); og.alpha_composite(ph,(1200-ph.width-55,30))
+          og.convert('RGB').save('assets/img/ogp.jpg','JPEG',quality=90,optimize=True,progressive=True)
+
+          s=re.sub(r'<title>.*?</title>','<title>平原こうや（平原幸弥）公式サイト｜プロフィール・活動・政策</title>',s,count=1,flags=re.S)
+          s=re.sub(r'<meta name="description" content="[^"]*">','<meta name="description" content="平原こうや（平原幸弥）公式サイト。プロフィール、活動、政策、最新の発信、SNS、お問い合わせ情報をご案内します。">',s,count=1)
+          seo='''
+          <link rel="canonical" href="https://hiraharakouya.com/">
+          <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+          <link rel="preload" as="image" href="assets/images/hero-home.webp" type="image/webp" fetchpriority="high">
+          <meta property="og:type" content="website">
+          <meta property="og:site_name" content="平原こうや 公式サイト">
+          <meta property="og:locale" content="ja_JP">
+          <meta property="og:title" content="平原こうや（平原幸弥）公式サイト｜プロフィール・活動・政策">
+          <meta property="og:description" content="平原こうや（平原幸弥）公式サイト。プロフィール、活動、政策、最新の発信、SNS、お問い合わせ情報をご案内します。">
+          <meta property="og:url" content="https://hiraharakouya.com/">
+          <meta property="og:image" content="https://hiraharakouya.com/assets/img/ogp.jpg">
+          <meta property="og:image:width" content="1200">
+          <meta property="og:image:height" content="630">
+          <meta name="twitter:card" content="summary_large_image">
+          <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"平原こうや","alternateName":"平原幸弥","url":"https://hiraharakouya.com/","sameAs":["https://x.com/HIRAHARAKOUYA","https://www.instagram.com/hiraharakouya327/","https://note.com/hirahara508"]}</script>
+          '''
+          if '</head>' not in s: raise SystemExit('Missing head end')
+          s=s.replace('</head>',seo+'</head>',1)
+
+          hero_data='data:image/'+dataurls[0][0]+';base64,'+dataurls[0][1]
+          prof_data='data:image/'+dataurls[1][0]+';base64,'+dataurls[1][1]
+          s=s.replace(f'<img src="{hero_data}" alt="平原こうや">','<img src="assets/images/hero-home.webp" alt="平原こうや" width="865" height="1300" loading="eager" fetchpriority="high" decoding="async">',1)
+          s=s.replace(f'<img src="{prof_data}" alt="平原こうや プロフィール写真">','<img src="assets/images/profile-home.webp" alt="平原こうや プロフィール写真" width="1254" height="1254" loading="lazy" decoding="async">',1)
+          if 'data:image/png;base64' in s or 'data:image/jpeg;base64' in s: raise SystemExit('Large raster data URL remains')
+
+          s=s.replace('<button class="menu-btn" aria-label="メニュー">','<button class="menu-btn" aria-label="メニュー" aria-expanded="false" aria-controls="site-menu">')
+          s=s.replace('<div class="menu">','<div class="menu" id="site-menu">',1)
+
+          css=r'''
+          /* ===== Phase 3: final responsive/accessibility polish ===== */
+          html{scroll-padding-top:72px}
+          body{font-size:16px;line-height:1.8}
+          .wrap{max-width:1080px;padding-left:20px;padding-right:20px}
+          .sec{padding:72px 0}
+          .sec-head{margin-bottom:40px}
+          .sec-head h2{font-size:30px;line-height:1.35;letter-spacing:.04em}
+          .message h2{font-size:30px;line-height:1.5}
+          .message p,.prof-text,.timeline p,.policy-card p,.sec-head>p:not(.en),.news-list a,.cta p{font-size:16px;line-height:1.8}
+          .prof-name{font-size:30px;line-height:1.35}
+          .timeline h3{font-size:18px;line-height:1.55}
+          .timeline li{padding:0 0 32px 28px}
+          .policy-card{padding:28px 24px}
+          .policy-card h3{font-size:20px;line-height:1.5;padding-right:46px;margin-bottom:12px}
+          .policy-card summary{display:flex;align-items:center;min-height:44px;padding:8px 0;font-size:16px;line-height:1.5;font-weight:700;color:var(--green-deep)}
+          .policy-detail{padding-top:8px}
+          .cta h2{font-size:30px;line-height:1.4}
+          .btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;font-size:16px;line-height:1.35}
+          .hero .hero-catch{font-size:30px;line-height:1.35}
+          .hero .hero-sub{font-size:16px;line-height:1.65}
+          .hero-actions{gap:12px}
+          .btn-red{background:var(--green-deep);color:#fff;box-shadow:0 6px 18px rgba(23,110,8,.22)}
+          .btn-red:hover{background:#155F07}
+          .en,.logo small,.news-list time,.more,.prof-name small{color:var(--green-deep)}
+          .tag{color:var(--green-deep)}
+          .menu{background:linear-gradient(155deg,#21830B 0%,#176E08 100%)}
+          .cta-card{background:linear-gradient(155deg,#21830B 0%,#176E08 100%)}
+          .cta .en{color:#D9FFD0}
+          .cta p{opacity:1}
+          .copy{color:rgba(255,255,255,.78)}
+          [data-sns-url][aria-disabled="true"]{opacity:.7;pointer-events:none}
+          a.logo,.gnav a,.fnav a,.menu .menu-sns a,.more{min-height:44px;display:inline-flex;align-items:center}
+          .gnav a,.fnav a,.menu .menu-sns a{padding-left:10px;padding-right:10px}
+          .menu .menu-sns a{min-width:44px;justify-content:center}
+          a.logo{justify-content:center;flex-direction:column}
+          a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #111;outline-offset:3px;box-shadow:0 0 0 2px #fff}
+          @media(max-width:839px){
+           .hero .hero-copy{margin:auto 14px 10px;padding:12px 16px;background:rgba(255,255,255,.94);border-color:rgba(255,255,255,.96)}
+           .hero-actions .btn{flex:1 1 calc(50% - 6px)}
+           .history .wrap{max-width:100%}
+           .timeline li{padding-left:28px}
+          }
+          @media(min-width:840px){
+           .sec{padding:104px 0}
+           .sec-head h2{font-size:44px}
+           .message h2{font-size:42px}
+           .cta h2{font-size:42px}
+           .prof-name{font-size:38px}
+           .timeline h3{font-size:20px}
+           .policy-card{padding:34px 30px}
+           .policy-card h3{font-size:22px}
+           .hero .hero-catch{font-size:clamp(40px,3.3vw,48px)}
+           .hero .hero-sub{font-size:16px}
+          }
+          @media(prefers-reduced-motion:reduce){
+           html{scroll-behavior:auto}
+           *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+          }
+          '''
+          if '</style>' not in s: raise SystemExit('Missing style end')
+          s=s.replace('</style>',css+'\n</style>',1)
+
+          old_script=re.search(r'<script>\s*document\.addEventListener\(\'DOMContentLoaded\'.*?</script>',s,flags=re.S)
+          if not old_script: raise SystemExit('Inline interaction script not found')
+          new_script='''<script>
+          document.addEventListener('DOMContentLoaded',function(){
+           var fh=document.querySelector('.fheader');
+           var btns=document.querySelectorAll('.menu-btn');
+           function setMenu(open){document.body.classList.toggle('menu-open',open);btns.forEach(function(b){b.setAttribute('aria-expanded',open?'true':'false')})}
+           addEventListener('scroll',function(){if(fh)fh.classList.toggle('show',scrollY>160)},{passive:true});
+           btns.forEach(function(b){b.addEventListener('click',function(){setMenu(!document.body.classList.contains('menu-open'))})});
+           document.querySelectorAll('.menu a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+           document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
+           var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+           if(reduce||!('IntersectionObserver' in window)){document.querySelectorAll('.rv').forEach(function(el){el.classList.add('on')})}
+           else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.rv').forEach(function(el){io.observe(el)})}
+          });
+          </script>'''
+          s=s[:old_script.start()]+new_script+s[old_script.end():]
+          p.write_text(s,encoding='utf-8')
+
+          Path('robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: https://hiraharakouya.com/sitemap.xml\n',encoding='utf-8')
+          sm=Path('sitemap.xml').read_text(encoding='utf-8').replace('https://example.com','https://hiraharakouya.com')
+          Path('sitemap.xml').write_text(sm,encoding='utf-8')
+          p404=Path('404.html'); t=p404.read_text(encoding='utf-8').replace('https://example.com','https://hiraharakouya.com').replace('https://hiraharakouya.com/assets/img/activity-wide.jpg','https://hiraharakouya.com/assets/img/ogp.jpg'); p404.write_text(t,encoding='utf-8')
+          Path('policy.html').write_text('<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><link rel="canonical" href="https://hiraharakouya.com/"><meta http-equiv="refresh" content="0;url=index.html#policy"><script>location.replace("index.html#policy")</script></head><body></body></html>\n',encoding='utf-8')
+
+          new_soup=BeautifulSoup(s,'html.parser')
+          new_body_text='\n'.join(x.strip() for x in new_soup.body.stripped_strings)
+          new_hrefs=[a.get('href') for a in new_soup.find_all('a')]
+          new_order=[e.get('id') or 'footer' for e in new_soup.find_all(['section','footer'])]
+          if new_body_text!=orig_body_text: raise SystemExit('Visible homepage text changed')
+          if new_hrefs!=orig_hrefs: raise SystemExit('Homepage link destinations changed')
+          if new_order!=orig_order or new_order!=['message','profile','history','policy','note','sns','connect','operator']: raise SystemExit('Section order changed')
+          if len(new_soup.select('#policy details.policy-card'))!=4: raise SystemExit('Policy card count changed')
+          if any(not x.get_text(strip=True) for x in new_soup.select('#policy .policy-detail')): raise SystemExit('Empty policy remains')
+          if new_soup.select('.signature'): raise SystemExit('Signature returned')
+          if new_soup.title.string!='平原こうや（平原幸弥）公式サイト｜プロフィール・活動・政策': raise SystemExit('Title mismatch')
+          if new_soup.find('link',rel='canonical')['href']!='https://hiraharakouya.com/': raise SystemExit('Canonical mismatch')
+          if new_soup.find('meta',attrs={'property':'og:url'})['content']!='https://hiraharakouya.com/': raise SystemExit('OG URL mismatch')
+          if new_soup.find('meta',attrs={'property':'og:image'})['content']!='https://hiraharakouya.com/assets/img/ogp.jpg': raise SystemExit('OG image mismatch')
+          json.loads(new_soup.find('script',attrs={'type':'application/ld+json'}).string)
+          if Image.open('assets/img/ogp.jpg').size!=(1200,630): raise SystemExit('OGP dimensions mismatch')
+
+          text_files=[x for x in Path('.').rglob('*') if x.is_file() and '.git' not in x.parts and '.github' not in x.parts and x.suffix.lower() in {'.html','.xml','.txt','.md'}]
+          if sum(x.read_text(encoding='utf-8',errors='ignore').count('example.com') for x in text_files): raise SystemExit('example.com remains')
+          if sum(x.read_text(encoding='utf-8',errors='ignore').count('大阪市港区') for x in text_files): raise SystemExit('Old Osaka-port content remains')
+          print('Phase 3 assertions passed')
+          PY
+      - name: Commit final adjustments
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html robots.txt sitemap.xml 404.html policy.html assets/images/hero-home.webp assets/images/profile-home.webp assets/img/ogp.jpg
+          git diff --cached --stat
+          git commit -m 'Apply Phase 3 responsive performance and SEO polish'
+          git push
