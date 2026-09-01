@@ -17,6 +17,27 @@
       if(node.nodeValue.indexOf(from)!==-1) node.nodeValue=node.nodeValue.split(from).join(to);
     });
   }
+  function removeMessageSignature(){
+    var section=document.querySelector('.message');
+    if(!section) return;
+
+    section.querySelectorAll('[class~="signature"],[class$="-signature"],[class*="message-sign"],[id*="signature"]').forEach(function(el){
+      el.remove();
+    });
+
+    section.querySelectorAll('img').forEach(function(img){
+      var meta=[img.className,img.id,img.getAttribute('alt'),img.getAttribute('src')].filter(Boolean).join(' ');
+      if(/signature|sign-|hirahara|署名|サイン/i.test(meta)){
+        var wrapper=img.closest('figure,p,div');
+        if(wrapper && wrapper!==section) wrapper.remove();
+        else img.remove();
+      }
+    });
+
+    section.querySelectorAll('*').forEach(function(el){
+      if(el.children.length===0 && /^平原\s*こうや$/.test((el.textContent||'').trim())) el.remove();
+    });
+  }
   function applyCopy(){
     setHTML('.hero-catch','改革を、<br>暮らしの前進へ。');
     setHTML('.hero-sub','現場の声を聞き、課題と向き合い、行動する。<br>政治の現場で培った経験を、育った兵庫の未来へ。');
@@ -34,6 +55,7 @@
 
     replaceVisibleText('兵庫県で生まれ育つ','大阪府で生まれ、兵庫県で育つ');
     replaceVisibleText('兵庫で生まれ育ち','大阪府で生まれ、兵庫県で育ち');
+    removeMessageSignature();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyCopy);
   else applyCopy();
