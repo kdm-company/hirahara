@@ -1,0 +1,39 @@
+name: Add missing NOTE description
+on:
+  push:
+    paths:
+      - '.github/workflows/add-note-description.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Insert approved NOTE description only
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<div class="sec-head rv"><p class="en">Note</p><h2>最新の発信</h2></div>'
+          new = '<div class="sec-head rv"><p class="en">Note</p><h2>最新の発信</h2><p>政治や地域について考えていること、日々の活動の中で感じたことを、自分の言葉で発信しています。</p></div>'
+          assert s.count(old) == 1, f'NOTE marker count={s.count(old)}'
+          assert '政治や地域について考えていること、日々の活動の中で感じたことを、自分の言葉で発信しています。' not in s
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+      - name: Verify minimal diff
+        shell: bash
+        run: |
+          git diff --check
+          test "$(git diff --numstat -- index.html | awk '{print $1+$2}')" -eq 2
+          git diff -- index.html
+      - name: Commit
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Add approved NOTE description'
+          git push
