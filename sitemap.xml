@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://hiraharakouya.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://hiraharakouya.com/profile.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://hiraharakouya.com/activity.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://hiraharakouya.com/support.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://hiraharakouya.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://hiraharakouya.com/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/profile</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/activity</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/policy</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/hub</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/support</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://hiraharakouya.com/privacy</loc><lastmod>2026-09-22</lastmod></url>
 </urlset>
