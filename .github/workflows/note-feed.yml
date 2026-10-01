@@ -1,11 +1,14 @@
 # note の最新記事をトップページ「最新の発信」に自動反映する。
 # note の RSS をサーバー側（GitHub Actions）で取得し、index.html の #note-feed を書き換えて main に push する。
-# main への push で Cloudflare が自動デプロイするため、note を更新すると最長30分程度でHPに反映される。
+# main への push で GitHub Pages が自動デプロイするため、note を更新すると通常15〜30分程度でHPに反映される。
+# ※ note 公式ヘルプ：「RSSを自分のサイトに埋め込む場合は、一度サーバ上で取り込んでから利用する」→ その方式。
 name: note feed
 
 on:
   schedule:
-    - cron: '7,37 * * * *'   # 30分ごと（毎時7分・37分）
+    # 15分ごと。GitHub の定期実行は混雑時に遅延・欠落することがあり、毎時0分付近が特に混むため
+    # 0分を避けて回数を増やし、1回飛ばされても次の回で拾えるようにしている。
+    - cron: '4,19,34,49 * * * *'
   workflow_dispatch:          # GitHub の Actions 画面から手動実行もできる
   push:
     branches: [main]
@@ -36,9 +39,18 @@ jobs:
           JST = datetime.timezone(datetime.timedelta(hours=9))
           LINK_RE = re.compile(r'^https://note\.com/hirahara508/n/[A-Za-z0-9]+$')
 
+          import time
           req = urllib.request.Request(FEED, headers={'User-Agent': 'Mozilla/5.0 (compatible; hiraharakouya.com note-feed)'})
-          with urllib.request.urlopen(req, timeout=30) as r:
-              root = ET.fromstring(r.read())
+          for attempt in range(3):   # 一時的な通信エラーに備えて最大3回試す
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      root = ET.fromstring(r.read())
+                  break
+              except Exception as e:
+                  print('RSS 取得失敗（%d回目）: %s' % (attempt + 1, e))
+                  if attempt == 2:
+                      sys.exit('RSS を取得できませんでした（一覧は変更しません）')
+                  time.sleep(20 * (attempt + 1))
 
           items = []
           for it in root.iter('item'):
