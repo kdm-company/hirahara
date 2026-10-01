@@ -27,17 +27,24 @@ export async function onRequestGet(context) {
   } catch (e) {
     items = null;
   }
-  if (!items || !items.length) return res;
+  if (!items || !items.length) return mark(res, 'static');   // RSS が取れないときは index.html の一覧のまま
 
   const html = items.map(render).join('');
   const headers = new Headers(res.headers);
   headers.delete('ETag');
   headers.delete('Last-Modified');
   headers.delete('Content-Length');
+  headers.set('X-Note-Feed', 'rss');   // 動作確認用：RSS から差し込んだ印
   const out = new Response(res.body, { status: 200, headers });
   return new HTMLRewriter()
     .on('#note-feed', { element(el) { el.setInnerContent(html, { html: true }); } })
     .transform(out);
+}
+
+function mark(res, value) {
+  const headers = new Headers(res.headers);
+  headers.set('X-Note-Feed', value);
+  return new Response(res.body, { status: res.status, headers });
 }
 
 async function loadItems(context) {
