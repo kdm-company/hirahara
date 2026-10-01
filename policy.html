@@ -5,5 +5,15 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-Y7Q1VN1BY2');
+  /* kdm-seo-ops: contact events */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('tel:') === 0) gtag('event', 'tel_click', { link_url: h });
+    else if (/(line\.me|lin\.ee)\//.test(h)) gtag('event', 'line_click', { link_url: a.href });
+    else if (h.indexOf('mailto:') === 0) gtag('event', 'mail_click', { link_url: h });
+    else if (/instagram\.com\//.test(h)) gtag('event', 'instagram_click', { link_url: a.href });
+  });
 </script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><link rel="canonical" href="https://hiraharakouya.com/"><meta http-equiv="refresh" content="0;url=index.html#policy"><script>location.replace("index.html#policy")</script></head><body></body></html>
