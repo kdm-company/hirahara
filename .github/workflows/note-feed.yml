@@ -1,14 +1,14 @@
 # note の最新記事をトップページ「最新の発信」に自動反映する。
 # note の RSS をサーバー側（GitHub Actions）で取得し、index.html の #note-feed を書き換えて main に push する。
-# main への push で GitHub Pages が自動デプロイするため、note を更新すると通常15〜30分程度でHPに反映される。
+# main への push で GitHub Pages が自動デプロイするため、note を更新すると通常1時間以内にHPに反映される。
+# 急ぎのときは GitHub の Actions 画面 → note feed → Run workflow で即時反映できる。
 # ※ note 公式ヘルプ：「RSSを自分のサイトに埋め込む場合は、一度サーバ上で取り込んでから利用する」→ その方式。
 name: note feed
 
 on:
   schedule:
-    # 15分ごと。GitHub の定期実行は混雑時に遅延・欠落することがあり、毎時0分付近が特に混むため
-    # 0分を避けて回数を増やし、1回飛ばされても次の回で拾えるようにしている。
-    - cron: '4,19,34,49 * * * *'
+    # 1時間ごと（毎時23分）。GitHub の定期実行は毎時0分付近が混んで遅延・欠落しやすいため、0分を避けている。
+    - cron: '23 * * * *'
   workflow_dispatch:          # GitHub の Actions 画面から手動実行もできる
   push:
     branches: [main]
